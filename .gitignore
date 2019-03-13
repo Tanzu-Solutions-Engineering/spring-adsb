@@ -1,0 +1,11 @@
+*.jar
+old
+OLD-*
+sdr-java
+mutability-dump1090
+**/target
+
+# Remove the below once code is stable
+*-dotnet
+*/*-configured.sh
+.DS_Store

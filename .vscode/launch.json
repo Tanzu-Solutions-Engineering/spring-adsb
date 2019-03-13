@@ -1,0 +1,96 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug (Launch) - Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Main<adsb-console>",
+            "request": "launch",
+            "mainClass": "io.pivotal.pa.adsbconsole.server.Main",
+            "projectName": "adsb-console"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Main<adsb-console>(1)",
+            "request": "launch",
+            "mainClass": "io.pivotal.pa.adsbrabbitmq.server.Main",
+            "projectName": "adsb-console"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-TestReceiver<adsb-console>",
+            "request": "launch",
+            "mainClass": "io.pivotal.pa.adsbrabbitmq.server.TestReceiver",
+            "projectName": "adsb-console"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-ADSBLiveProcessorApplication<adsb-live-processor>",
+            "request": "launch",
+            "mainClass": "io.pivotal.pa.rabbitmq.adsbliveprocessor.ADSBLiveProcessorApplication",
+            "projectName": "adsb-live-processor"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-AdsbDataLogger<adsb>",
+            "request": "launch",
+            "mainClass": "nl.revolution.sdr.connectors.adsb.debug.AdsbDataLogger",
+            "projectName": "adsb"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Main<adsb>",
+            "request": "launch",
+            "mainClass": "nl.revolution.sdr.connectors.adsb.server.Main",
+            "projectName": "adsb"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-AircraftMonitorApplication<aircraft-monitor>",
+            "request": "launch",
+            "mainClass": "io.pivotal.pa.web.aircraftmonitor.AircraftMonitorApplication",
+            "projectName": "aircraft-monitor"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-AISDataLogger<ais>",
+            "request": "launch",
+            "mainClass": "nl.revolution.sdr.connectors.ais.debug.AISDataLogger",
+            "projectName": "ais"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Main<ais>",
+            "request": "launch",
+            "mainClass": "nl.revolution.sdr.connectors.ais.server.Main",
+            "projectName": "ais"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Main<frontend>",
+            "request": "launch",
+            "mainClass": "nl.revolution.sdr.frontend.server.Main",
+            "projectName": "frontend"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-ADSBMultiToLiveApplication",
+            "request": "launch",
+            "mainClass": "io.pivotal.pa.rabbitmq.adsbmultitolive.ADSBMultiToLiveApplication"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-SurveillanceProcessorApplication",
+            "request": "launch",
+            "mainClass": "io.pivotal.pa.rabbitmq.surveillanceprocessor.SurveillanceProcessorApplication"
+        }
+    ]
+}
