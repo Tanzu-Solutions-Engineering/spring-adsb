@@ -53,7 +53,7 @@ You should see messages about aircraft appear on the console.
 
 ### View your aircraft online
 
-Your aircraft, along with aircraft from all global receivers, will now be visible on the central map here: http://aircraft-monitor-central.cfapps.pivotal.io/gmap.html
+Your aircraft, along with aircraft from all global receivers, will now be visible on the central map here: http://aircraft-monitor-central.cfapps.io/gmap.html
 
 ### Running live-processor and aircraft-monitor yourself
 
