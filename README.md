@@ -16,6 +16,10 @@ Every Pivot can run their own receiver and contribute to the global map! If you'
 
 First, contact Adam Fowler in the UK Platform Architect team <afowler@pivotal.io> for a key so you can send data to RabbitMQ.
 
+### Buy a receiver
+
+The code you will use requires a specific chipset, so not all DVB-T receivers will work. A good one is the NeoElec R820T2 SDR NESDR Mini 2 which is what I use. This is an inexpensive item that can be found easily online, including from Amazon.
+
 ### Install receiver software
 
 Now, install and compile dump1090:-
@@ -28,7 +32,9 @@ make
 cd ..
 ```
 
-Now plugin your Software Defined Radio stick - I like the ??? which you can get for $20 on amazon - And run the receiver:-
+If it fails, read the README in the project's folder for ideas, or get Adam Fowler on a zoom meeting.
+
+Now plugin your Software Defined Radio stick and run the receiver:-
 
 ```sh
 ./runreceiver.sh
