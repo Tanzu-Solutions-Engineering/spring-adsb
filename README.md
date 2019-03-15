@@ -28,11 +28,25 @@ Now, install and compile dump1090:-
 git clone https://github.com/mutability/dump1090
 mv dump1090 mutability-dump1090
 cd mutability-dump1090
+# Following line is for Raspbian on the Raspberry Pi. Your system may vary
+sudo apt-get install libusb-1.0-0-dev librtlsdr-dev maven
 make
 cd ..
 ```
 
 If it fails, read the README in the project's folder for ideas, or get Adam Fowler on a zoom meeting.
+
+Now prepare the data web server:-
+
+```sh
+sudo mkdir /run/dump1090
+sudo chown pi:pi /run/dump1090
+sudo apt-get install lighttpd
+sudo cp lighttpd.conf /etc/lighttpd/
+sudo /etc/init.d/lighttpd restart
+```
+
+Edit your receiver app to put the approximate (not too accurate!) location of your base station. This can be found in the --lon and --lat settings of ./runreceiver.sh
 
 Now plugin your Software Defined Radio stick and run the receiver:-
 
@@ -40,7 +54,7 @@ Now plugin your Software Defined Radio stick and run the receiver:-
 ./runreceiver.sh
 ```
 
-To test view the internal (your base station only) map view: http://localhost:8081/gmap.html
+To test view the internal (your base station only) json view: http://localhost:8081/data/aircraft.json
 
 You should see aircraft information in the console, and in the map view
 
@@ -51,11 +65,39 @@ You now need to compile and run the adsb-console-java project.
 ```sh
 cd adsb-console-java
 mvn package
+```
+
+Now place the below in the file ./mutability-dump1090/runitmq-configured.sh
+
+```sh
+#!/bin/sh
 export AMQP_URL=amqp://SOMEURL-PROVIDED-BY-ADAMFOWLER
 ./runitmq.sh
 ```
 
-You should see messages about aircraft appear on the console.
+Edit runitmq.sh to reflect the name of your Base Station. E.g. "Fred's Base Station". Do not put your full name or address.
+
+Now run it :-
+
+```sh
+./mutability-dump1090/runitmq-configured.sh
+```
+
+You should see messages about aircraft appear on the console. Now Ctrl+C to stop this.
+
+### Make this all run on startup
+
+Execute the following commands
+
+```sh
+sudo cp startup.sh /etc/init.d/dump1090
+sudo chown root:root /etc/init.d/dump1090
+sudo chmod gu+x /etc/init.d/dump1090
+sudo ln -s /etc/init.d/dump1090 /etc/rc5.d/
+sudo reboot
+```
+
+Upon restart you should be able to hit the JSON http endpoint again, as well as see all your data on the central map, below.
 
 ### View your aircraft online
 

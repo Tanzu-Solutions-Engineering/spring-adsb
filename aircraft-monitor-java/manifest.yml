@@ -1,9 +1,9 @@
 ---
 applications:
-- name: aircraft-monitor-central
+- name: aircraft-monitor
   memory: 650M
-  instances: 1
-  random-route: false
+  instances: 2
+  random-route: true
   path: target/aircraft-monitor-0.0.1-SNAPSHOT.jar
   services:
   - smallredis
