@@ -44,7 +44,11 @@ public class FlightData {
         if (null == obj) {
             data.lon = 0.0d;
         } else {
-          data.lon = (double)obj;
+            try {
+                data.lon = (double) obj;
+            } catch (Exception e) {
+                data.lon = -1;
+            }
         }
         obj = json.get("altitude");
         if (null == obj) {
@@ -53,62 +57,102 @@ public class FlightData {
             if (obj.toString().equals("grnd")) {
                 data.altitude = -1;
             } else {
-                data.altitude = (long)obj;
+                try {
+                    data.altitude = (long)obj;
+                } catch (Exception e ) {
+                    data.altitude = -1;
+                }
             }
         }
         obj = json.get("track");
         if (null == obj) {
             data.track = 0;
         } else {
-          data.track = (long)obj;
+            try {
+                data.track = (long) obj;
+            } catch (Exception e) {
+                data.altitude = -1;
+            }
         }
         obj = json.get("messages");
         if (null == obj) {
             data.messages = 1;
         } else {
-          data.messages = (long)obj;
+            try {
+                data.messages = (long) obj;
+            } catch (Exception e) {
+                data.messages = -1;
+            }
         }
         obj = json.get("lat");
         if (null == obj) {
             data.lat = 0.0d;
         } else {
-          data.lat = (double)obj;
+            try {
+                data.lat = (double) obj;
+            } catch (Exception e) {
+                data.lat = -1;
+            }
         }
         obj = json.get("speed");
         if (null == obj) {
             data.speed = 0;
         } else {
-          data.speed = (long)obj;
+            try {
+                data.speed = (long) obj;
+            } catch (Exception e) {
+                data.speed = -1;
+            }
         }
         obj = json.get("vert_rate");
         if (null == obj) {
             data.vert_rate = 0;
         } else {
-          data.vert_rate = (long)obj;
+            try {
+                data.vert_rate = (long) obj;
+            } catch (Exception e) {
+                data.vert_rate = -1;
+            }
         }
         obj = json.get("timestamp");
         if (null == obj) {
             data.timestamp = 0;
         } else {
-          data.timestamp = (long)obj;
+            try {
+                data.timestamp = (long) obj;
+            } catch (Exception e) {
+                data.timestamp = -1;
+            }
         }
         obj = json.get("seen");
         if (null == obj) {
             data.seen = 0;
         } else {
-          data.seen = (double)obj;
+            try {
+                data.seen = (double) obj;
+            } catch (Exception e) {
+                data.seen = -1;
+            }
         }
         obj = json.get("seen_pos");
         if (null == obj) {
             data.seen_pos = 0;
         } else {
-          data.seen_pos = (double)obj;
+            try {
+                data.seen_pos = (double) obj;
+            } catch (Exception e) {
+                data.seen_pos = -1;
+            }
         }
         obj = json.get("rssi");
         if (null == obj) {
             data.rssi = 0;
         } else {
-          data.rssi = (double)obj;
+            try {
+                data.rssi = (double) obj;
+            } catch (Exception e) {
+                data.rssi = -1;
+            }
         }
         return data;
     }
