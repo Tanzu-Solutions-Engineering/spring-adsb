@@ -34,10 +34,10 @@ DefaultZoomLvl   = 5;
 // Center marker. If dump1090 provides a receiver location,
 // that location is used and these settings are ignored.
 
-SiteShow    = true;           // true to show a center marker
-SiteLat     = 53.23;            // position of the marker
-SiteLon     = -1.37;
-SiteName    = "My Radar Site"; // tooltip of the marker
+SiteShow    = false;           // true to show a center marker
+SiteLat     = 0;            // position of the marker
+SiteLon     = 0;
+SiteName    = ""; // tooltip of the marker
 
 // -- Marker settings -------------------------------------
 
@@ -97,9 +97,9 @@ OutlineADSBColor = '#000000';
 // Outline color for aircraft icons with a mlat position
 OutlineMlatColor = '#4040FF';
 
-SiteCircles = true; // true to show circles (only shown if the center marker is shown)
+SiteCircles = false; // true to show circles (only shown if the center marker is shown)
 // In nautical miles or km (depending settings value 'Metric')
-SiteCirclesDistances = new Array(100,150,200);
+SiteCirclesDistances = new Array(0);
 
 // Show the clocks at the top of the righthand pane? You can disable the clocks if you want here
 ShowClocks = true;

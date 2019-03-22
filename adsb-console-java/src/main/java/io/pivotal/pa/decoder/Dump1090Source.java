@@ -11,7 +11,7 @@ import java.util.Map;
 public class Dump1090Source {
 
     private static final Logger LOG = LoggerFactory.getLogger(Dump1090Source.class);
-    private static final long FETCH_DATA_INTERVAL = 1000L;
+    private static final long FETCH_DATA_INTERVAL = 5000L;
 
     private final Dump1090Client dump1090Client;
     private final PositionDataService positionDataService;
