@@ -53,14 +53,22 @@ public class FlightData {
             if (obj.toString().equals("grnd")) {
                 data.altitude = -1;
             } else {
+try {
                 data.altitude = (long)obj;
+} catch (ClassCastException cce) {
+data.altitude = -1;
+}
             }
         }
         obj = json.get("track");
         if (null == obj) {
             data.track = 0;
         } else {
+try {
           data.track = (long)obj;
+} catch (ClassCastException cce) {
+data.track= -1;
+}
         }
         obj = json.get("messages");
         if (null == obj) {
