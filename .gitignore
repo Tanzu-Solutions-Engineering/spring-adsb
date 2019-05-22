@@ -6,6 +6,13 @@ mutability-dump1090
 **/target
 
 # Remove the below once code is stable
-*-dotnet
+surveillance-processor-dotnet
+adsb-console-dotnet
 */*-configured.sh
 .DS_Store
+dump.rdb
+
+*-dotnet/obj
+*-dotnet/bin
+
+*-java/.mvn

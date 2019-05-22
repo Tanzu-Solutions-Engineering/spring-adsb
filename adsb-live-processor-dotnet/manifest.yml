@@ -1,0 +1,11 @@
+---
+applications:
+- name: adsb-live-processor
+  memory: 64M
+  disk_quota: 256M
+  instances: 3 
+  random-route: true
+  health-check-type: process
+  services:
+  - surveil-amqp
+  - smallredis

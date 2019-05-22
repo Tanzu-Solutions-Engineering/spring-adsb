@@ -170,16 +170,24 @@ public class AircraftMonitorApplication {
             }
         });
 
-        
-
         return "{\"now\":" + System.currentTimeMillis()/1000.0d + ", \"messages\":" + messages + " ,\"aircraft\":" + list + " }";
     }
 
     @RequestMapping("/view/*")
     String viewFolder() {
-        // TODO expose the public_html folder contents under /view/
+        // expose the public_html folder contents under /view/
         return "";
     }
+
+
+
+
+
+
+
+
+
+
 /*
     @RequestMapping("/clear")
     String clear() {

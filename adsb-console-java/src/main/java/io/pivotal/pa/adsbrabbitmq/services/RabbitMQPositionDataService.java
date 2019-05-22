@@ -40,9 +40,8 @@ public class RabbitMQPositionDataService implements PositionDataService {
         connection = factory.newConnection();
         channel = connection.createChannel();
         channel.exchangeDeclare("adsb-fan-exchange","fanout");
-        //channel.queueDeclare("adsbposition", false, false, false, null);
       } catch (Exception e) {
-          e.printStackTrace();
+        e.printStackTrace();
       }
 
     }
@@ -51,47 +50,19 @@ public class RabbitMQPositionDataService implements PositionDataService {
     public void positionDataReceived(PositionData positionData) {
         logPositionDataReceived();
 
-        // Write data to Console
-        //Map dataMap = positionData.toMap();
-        //System.out.print("ObjectType: " + dataMap.get("objectType").toString());
-        //System.out.print(", ObjectId: " + dataMap.get("objectId").toString());
-        //System.out.print(", longitude: " + dataMap.get("longitude").toString());
-        //System.out.print(", latitude: " + dataMap.get("latitude").toString());
-        //System.out.println(", heading: " + dataMap.get("heading").toString());
-
-        //String message = "Hello World!";
         try {
-            positionData.setGroundStationName(gsName);
-          //channel.basicPublish("", "adsbposition", null, message.getBytes("UTF-8"));
+          positionData.setGroundStationName(gsName);
           ObjectMapper objectMapper = new ObjectMapper();
           objectMapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
           String json = objectMapper.writeValueAsString(positionData);
           AMQP.BasicProperties.Builder builder = new AMQP.BasicProperties.Builder();
-          // TODO set timestamp to source ADS-B message timestamp
           builder.contentType("application/json");
           AMQP.BasicProperties props = builder.build();
-          //channel.basicPublish("", "adsbposition", props, json.getBytes("UTF-8"));
           channel.basicPublish("adsb-fan-exchange", "", props, json.getBytes("UTF-8")); // any (and all) queue name on this exchange
           System.out.println(" [x] Sent '" + json + "'");
         } catch (Exception e) {
-            e.printStackTrace();
+          e.printStackTrace();
         }
-
-        // TODO json support
-        /*
-        ObjectMapper objectMapper = new ObjectMapper();
-        String json = objectMapper.writeValueAsString(positionData);
-        AMQP.BasicProperties props = new AMQP.BasicProperties();
-        props.setContentType("application/json");
-        Message jsonMessage = MessageBuilder
-          .withBody(json.getBytes())
-          .andProperties(MessagePropertiesBuilder
-            .newInstance()
-            .setContentType("application/json")
-            .build()
-          )
-          .build();
-        */
     }
 
     public List<JSONObject> getPositionData(Long minTimestamp, Long maxTimestamp, String objectId, PositionData.ObjectType objectType) {
