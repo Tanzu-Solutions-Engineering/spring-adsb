@@ -5,7 +5,7 @@ applications:
   disk_quota: 256M
   env:
     JAVA_OPTS: "-Xss256k -XX:ReservedCodeCacheSize=20M"
-  instances: 2
+  instances: 3 
   random-route: true
   path: target/adsb-live-processor-0.0.1-SNAPSHOT.jar
   health-check-type: process

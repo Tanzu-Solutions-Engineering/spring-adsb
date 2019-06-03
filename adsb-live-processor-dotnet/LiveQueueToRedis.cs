@@ -10,6 +10,7 @@ using Steeltoe.Extensions.Configuration.CloudFoundry;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
 
 namespace SurveillanceProcessor
 {
@@ -42,7 +43,16 @@ namespace SurveillanceProcessor
           //}
           redisUri = creds["host"].Value + ":" + creds["port"].Value + ",password=" + creds["password"].Value;
       }
-      Service[] rabbitOptionsArray = service.Value.Services["cloudamqp"];
+      Service[] rabbitOptionsArray = null;
+      try {
+          rabbitOptionsArray = service.Value.Services["cloudamqp"];
+      } catch (KeyNotFoundException knfe) {
+          try {
+              rabbitOptionsArray = service.Value.Services["p.rabbitmq"]; 
+          } catch (KeyNotFoundException knfe2)
+          {
+          }
+      }
       var rabbitUri = "";
       if (rabbitOptionsArray.Length > 0) {
           var creds = rabbitOptionsArray[0].Credentials;
@@ -65,7 +75,7 @@ namespace SurveillanceProcessor
                                  exclusive: false,
                                  autoDelete: false,
                                  arguments: null);
-            channel.ExchangeDeclare(exchange: "adsb-fan-exchange", type: "fanout", durable: false, autoDelete: false);
+            channel.ExchangeDeclare(exchange: "adsb-fan-exchange", type: "topic", durable: true, autoDelete: false);
             channel.QueueBind(queue: "adsbposition.live", exchange: "adsb-fan-exchange",routingKey: "");
 
             channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
