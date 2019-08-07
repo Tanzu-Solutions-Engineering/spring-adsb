@@ -1,0 +1,13 @@
+---
+applications:
+- name: aircraft-monitor
+  buildpacks:
+   - dotnet_core_buildpack
+  memory: 256M
+  disk_quota: 200M
+  instances: 3 
+  random-route: true 
+  env:
+    ASPNETCORE_ENVIRONMENT: Development
+  services:
+  - smallredis

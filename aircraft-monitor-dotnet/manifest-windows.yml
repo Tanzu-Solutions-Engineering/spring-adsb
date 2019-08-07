@@ -1,0 +1,14 @@
+---
+applications:
+- name: aircraft-monitor
+  buildpacks:
+   - hwc_buildpack
+  stack: windows2016
+  memory: 256M
+  disk_quota: 200M
+  instances: 3 
+  random-route: true 
+  env:
+    ASPNETCORE_ENVIRONMENT: Development
+  services:
+  - smallredis
