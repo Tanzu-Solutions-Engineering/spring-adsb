@@ -4,32 +4,20 @@ import React, {
   from "react";
 import Table from 'react-bootstrap/Table';
 
-class AircraftTable extends Component {
+import withTracksContext from './Tracks/withTracksContext';
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      data: null
-    }
-  }
-  componentDidMount() {
-    this.refreshData(); 
-  }
-  refreshData() {
-    console.log("In refresh data");
-    fetch('http://aircraft-monitor-central.cfapps.io/data/aircraft.json')
-      .then(async (response) =>  {
-        var json = await response.json();
-        //console.log("Got data: " + JSON.stringify(json));
-        this.setState({ data: json })
-      })
-      .catch((err) => {
-        console.log("Error reported fetching aircraft json data...");
-        console.log(err);
-      });
-  }
+class AircraftTable extends Component {
   render() {
-    const { data } = this.state;
+    const { data } = this.props.context.state;
+
+    const sortedData = !data ? null : [...data.aircraft].sort((a, b) => {
+      console.log("Comparing a: " + JSON.stringify(a.flight) + " to b: " + JSON.stringify(b.flight));
+      if (a.flight > b.flight) {
+        return 1;
+      }
+      return -1;
+    });
+
     return (
     <Table striped bordered hover size="sm">
       <thead>
@@ -42,8 +30,8 @@ class AircraftTable extends Component {
         </tr>
       </thead>
       <tbody>
-        { !data ? <tr><td colSpan='5'>Loading...</td></tr> :
-          data.aircraft.map((item) => (
+          {!sortedData ? <tr><td colSpan='5'>Loading...</td></tr> :
+            sortedData.map((item) => (
             <tr key={item.flight}>
               <td>{item.flight}</td>
               <td>{item.track}</td>
@@ -57,4 +45,4 @@ class AircraftTable extends Component {
     </Table>)
   }
 }
-export default AircraftTable;
+export default withTracksContext(AircraftTable);

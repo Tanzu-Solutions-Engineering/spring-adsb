@@ -13,8 +13,6 @@ import VectorLayer from 'ol/layer/Vector';
 import { Vector, OSM } from 'ol/source';
 import { Fill, RegularShape, Stroke, Style } from 'ol/style.js';
 
-import withTracksContext from './Tracks/withTracksContext';
-
 //var ol = require('ol');
 var stroke = new Stroke({ color: 'black', width: 2 });
 var fill = new Fill({ color: 'red' });
@@ -69,27 +67,57 @@ class OpenMap extends React.Component {
     this.setState({
       map: map,
       featuresLayer: featuresLayer,
-      defaultFeature: defaultFeature
+      defaultFeature: defaultFeature,
+      aircraft: []
     });
+    try {
+      setInterval(async () => {
+        this.refreshData();
+      }, 1000);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  refreshData() {
+    //console.log("In refresh data");
+    fetch('http://aircraft-monitor-central.cfapps.io/data/aircraft.json')
+      .then(async (response) => {
+        var json = await response.json();
+        var items = [];
+        for (var i = 0; i < json.aircraft.length; i++) {
+          var ac = json.aircraft[i];
+          //console.log("Creating feature for: " + ac.flight);
+          var item = new Feature({
+            geometry: new Point(fromLonLat([ac.lon, ac.lat])),
+            //point: new Point(fromLonLat([ac.lon, ac.lat])),
+            name: ac.flight
+          });
+          item.setStyle(style);
+          items.push(item);
+        }
+        //console.log("Adding all features to the items state array a.");
+
+        //var fl = new Vector({ features: items });
+        //this.state.featuresLayer.addFeatures(this.state.items);
+        this.setState({
+          aircraft: items, data: json,
+          //featuresLayer: fl
+        }); // TODO remove all first
+      })
+      .catch((err) => {
+        console.log("Error reported fetching aircraft json data...");
+        console.log(err);
+      });
   }
 
   // pass new features from props into the OpenLayers layer object
   componentDidUpdate(prevProps, prevState) {
-    var items = [];
-    for (var i = 0; i < this.props.context.state.data.aircraft.length; i++) {
-      var ac = this.props.context.state.data.aircraft[i];
-      //console.log("Creating feature for: " + ac.flight);
-      var item = new Feature({
-        geometry: new Point(fromLonLat([ac.lon, ac.lat])),
-        //point: new Point(fromLonLat([ac.lon, ac.lat])),
-        name: ac.flight
-      });
-      item.setStyle(style);
-      items.push(item);
-    }
     this.state.featuresLayer.setSource(
       new Vector({
-        features: items
+        features: [
+          //this.state.defaultFeature, 
+          ...this.state.aircraft]
       })
     );
   }
@@ -121,4 +149,4 @@ class OpenMap extends React.Component {
 
 }
 
-export default withTracksContext(OpenMap);
+export default OpenMap;

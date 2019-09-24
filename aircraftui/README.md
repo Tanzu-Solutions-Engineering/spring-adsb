@@ -70,23 +70,29 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 
 ## TODOs
 
+### For before S1P
+
 - DONE Basic POC
  - DONE Basic layout, hidden component to the right, map main to the left
  - DONE Show aircraft positions from JSON URL
  - DONE Have an aircraft info section on the right showing the same data as a table
  - DONE Refresh JSON map every second
-- More Aircraft Info
- - Abstract out aircraft rest call to another component, and use withAircraftInfo
+- WIP More Aircraft Info
+ - DONE Abstract out aircraft rest call to another component, and use withAircraftInfo
  - Make aircraft clickable, with data highlighted in table on RHS
  - Provide links to other info providers
  - Ascent / Descent and altitude indications and colours
  - Aircraft icon/vector
  - National flags on table
  - Airline names for common codes
-- Demo material
- - Include popup architecture png image
+- Demo prep
+ - Include popup architecture png image, with steps noted, and tech icons used (redis, rabbit, etc.)
  - Include link to rest api endpoint
  - Include own link to PWS info page
+ - Pivotal corporate colour scheme
+
+### For post S1P
+
 - Niceties
  - Position estimate until re-appears in signal
  - Ground station names and locations
