@@ -76,6 +76,7 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
  - DONE Have an aircraft info section on the right showing the same data as a table
  - DONE Refresh JSON map every second
 - More Aircraft Info
+ - Abstract out aircraft rest call to another component, and use withAircraftInfo
  - Make aircraft clickable, with data highlighted in table on RHS
  - Provide links to other info providers
  - Ascent / Descent and altitude indications and colours
