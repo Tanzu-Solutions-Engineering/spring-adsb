@@ -1,10 +1,19 @@
 import React from 'react';
-import SideNav from '@trendmicro/react-sidenav';// { NavItem, NavIcon, NavText } 
-//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import SideNav, { NavItem, NavIcon, NavText }  from '@trendmicro/react-sidenav';
+
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 
 import AircraftTable from './AircraftTable';
+import GroundStationTable from './GroundStationTable';
+import SelectedInfo from './SelectedInfo';
+
+import Tabs from 'react-bootstrap/Tabs';
+import Tab from 'react-bootstrap/Tab';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import TracksContext from './Tracks/context';
 
 const NavHeader = styled.div`
     display: ${props => (props.expanded ? 'block' : 'none')};
@@ -56,6 +65,7 @@ class Sidebar extends React.Component {
   }
   render() {
     const { expanded } = this.state;
+    var that = this;
 
     return (
       <SideNav
@@ -71,14 +81,50 @@ class Sidebar extends React.Component {
         </NavHeader>
 
         {expanded &&
-          <NavInfoPane>
-            <AircraftTable />
+          <NavInfoPane className="nav-info-max">
+            <SelectedInfo />
+            <Tabs defaultActiveKey='aircraft'>
+              <Tab eventKey='aircraft' title="Aircraft">
+                <AircraftTable />
+              </Tab>
+              <Tab eventKey='stations' title="Stations">
+                <GroundStationTable />
+              </Tab>
+            </Tabs>
           </NavInfoPane>
         }
         <SideNav.Nav>
+          { !expanded && 
+          <NavItem>
+            <NavIcon>
+              <FontAwesomeIcon icon="plane" style={{ fontSize: '1.75em' }} />
+              <div className="icon-overlay">{this.context.state.data?this.context.state.data.aircraft.length:0}</div>
+            </NavIcon>
+            <NavText></NavText>
+          </NavItem>
+          }
+          {!expanded && 
+          <NavItem>
+            <NavIcon>
+              <FontAwesomeIcon icon="wifi" style={{ fontSize: '1.75em' }} />
+              <div className="icon-overlay">{this.context.state.groundStations ? Object.keys(this.context.state.groundStations).length : 0}</div>
+            </NavIcon>
+            <NavText> </NavText>
+          </NavItem>
+          }
+          <NavItem active={this.context.state.paused} onClick={(evt) => { that.context.state.togglePause(); }}>
+            <NavIcon>
+              <FontAwesomeIcon icon="pause" style={{ fontSize: '1.75em' }} />
+            </NavIcon>
+            <NavText>
+              Click to {this.context.state.paused ? "unpause": "pause"}
+            </NavText>
+          </NavItem>
         </SideNav.Nav>
       </SideNav>
     )
   }
 }
+Sidebar.contextType = TracksContext;
 export default withRouter(Sidebar);
+// 

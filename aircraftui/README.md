@@ -79,24 +79,52 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
  - DONE Refresh JSON map every second
 - WIP More Aircraft Info
  - DONE Abstract out aircraft rest call to another component, and use withAircraftInfo
- - Make aircraft clickable, with data highlighted in table on RHS
+ - DONE cache: reload needed on fetch - BUG figure out why context update isn't updating components
+ - DONE more user friendly aircraft codes (airline not codes)
+ - DONE Make aircraft clickable, with data highlighted in table and map
+ - DONE Tabbed sidebar (aircraft table, ground stations, ...)
+ - DONE Selected info component on LHS table (invisible if none selected) akin to current selection area
+ - DONE Aircraft flight code decoded
+ - DONE National flags on table
+ - DONE Visible aircraft summary when side nav is closed
+ - DONE Ground station summary when side nav is closed
+ - DONE Ground station details table
+ - Proper aircraft map icons
+ - WIP Ascent / Descent and altitude indications and colours
+  - DONE Table
+  - Map
+ - Aircraft category decoded
  - Provide links to other info providers
- - Ascent / Descent and altitude indications and colours
- - Aircraft icon/vector
- - National flags on table
- - Airline names for common codes
+ - Make table scrollable
+- DONE Testing
+ - DONE Pause button for rest requests for testing?
+ - DONE Don't fire off another rest request unless previous has completed
 - Demo prep
- - Include popup architecture png image, with steps noted, and tech icons used (redis, rabbit, etc.)
+ - Demo info popup - Include popup architecture png image, with steps noted, and tech icons used (redis, rabbit, etc.)
+ - Pivotal info popup - Nav link in large / minimised views
  - Include link to rest api endpoint
  - Include own link to PWS info page
  - Pivotal corporate colour scheme
+ - Show more map controls (layers, track toggle, zoom buttons etc.)
 
 ### For post S1P
 
+- Offline
+ - Demo data for offline demonstrations
+  - Base mapping layer (SVG countries?)
+  - Air
+  - Sea
+  - Land
+  - Overlays (if any)
 - Niceties
  - Position estimate until re-appears in signal
  - Ground station names and locations
  - Aircraft tracks
+ - Minimised side bar to show aircraft numbers, ground stations numbers, other links
+ - Ground station list
+ - Hover over groundstation highlights all aircraft from that station
+  - Requires selectedFlight and selectedGS methods in provider to share context
+ - Special squawk code highlighting
 - Alternative UI
  - RADAR screen dark mode
  - Aircraft speed trails
@@ -105,3 +133,7 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 - Future proofing
  - Support for Sea (AIS) data
  - Support for different land components (tank, jeep, person)
+
+### For backend developments
+- Websockets / streaming
+ - track provider to try websockets, if fails fall back to rest (Spring will likely support websockets, .NET won't)

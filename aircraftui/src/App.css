@@ -23,8 +23,8 @@
 }
 
 .openlayers-map {
-  height: 100vh !important;
-  margin-right: -10px;
+  /*height: 100vh !important;
+  margin-right: -10px;*/
 }
 
 .trackernav {
@@ -36,6 +36,30 @@ html {
 }
 
 .fullwidth {
-  width: 100vw;
-  height: 100vh !important;
+  width: calc(100vw - 16px) !important;
+  height: calc(100vh - 16px) !important;
+}
+
+.selected-flight {
+  background-color: red !important;
+}
+
+.overflow-scroll {
+  overflow-y: scroll;
+}
+.nav-info-max {
+  height: calc(100vh - 120px);
+  overflow-y: scroll;
+}
+.icon-overlay {
+  position: relative;
+  top: -40px;
+  left: 10px;
+  color: rgb(51, 47, 47);
+}
+.invisible {
+  display: none;
+}
+.mapContainer {
+  height: calc(100vh - 15px);
 }

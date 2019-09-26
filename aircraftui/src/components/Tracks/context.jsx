@@ -1,5 +1,5 @@
 import React from 'react';
 
-const TracksContext = React.createContext("tracks");
+const TracksContext = React.createContext();
 
 export default TracksContext;
