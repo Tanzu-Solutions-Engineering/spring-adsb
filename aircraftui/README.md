@@ -89,16 +89,18 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
  - DONE Visible aircraft summary when side nav is closed
  - DONE Ground station summary when side nav is closed
  - DONE Ground station details table
- - Proper aircraft map icons
+ - DONE Proper aircraft map icons
  - WIP Ascent / Descent and altitude indications and colours
   - DONE Table
-  - Map
+  - WIP Map
  - Aircraft category decoded
  - Provide links to other info providers
  - Make table scrollable
 - DONE Testing
  - DONE Pause button for rest requests for testing?
  - DONE Don't fire off another rest request unless previous has completed
+ - Check for altitude of 'ground'
+ - Change favicon and react app title
 - Demo prep
  - Demo info popup - Include popup architecture png image, with steps noted, and tech icons used (redis, rabbit, etc.)
  - Pivotal info popup - Nav link in large / minimised views
@@ -106,6 +108,9 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
  - Include own link to PWS info page
  - Pivotal corporate colour scheme
  - Show more map controls (layers, track toggle, zoom buttons etc.)
+- Stretch
+  - Sea - https://github.com/dgiardini/rtl-ais
+  - Satellites - https://www.raspberrypi.org/blog/build-a-satnogs-ground-station-raspberry-pi-3b-hackspace-magazine-18/
 
 ### For post S1P
 
@@ -115,6 +120,7 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
   - Air
   - Sea
   - Land
+  - Satellites
   - Overlays (if any)
 - Niceties
  - Position estimate until re-appears in signal

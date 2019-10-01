@@ -3,6 +3,8 @@ import React from 'react';
 //open layers and styles
 import {fromLonLat} from 'ol/proj';
 import Map from 'ol/Map';
+import Icon from 'ol/style/Icon';
+//import Style from 'ol/style/Style';
 import Tile from 'ol/layer/Tile';
 import Feature from 'ol/Feature';
 import View from 'ol/View';
@@ -16,6 +18,7 @@ import Select from 'ol/interaction/Select.js';
 //import withTracksContext from './Tracks/withTracksContext';
 
 import TracksContext from './Tracks/context';
+import { getBaseMarker, svgPathToSvg, svgPathToURI } from './markers';
 
 require('ol/ol.css');
 
@@ -44,6 +47,10 @@ var selectedStyle = new Style({
   })
 });
 class OpenMap extends React.Component {
+  constructor(props) {
+    super(props);
+    this.styleHolder = {}; // temp, always safe to recreate, no need for setState
+  }
 
   async componentDidMount() {
     var defaultFeature = new Feature({
@@ -110,16 +117,7 @@ class OpenMap extends React.Component {
     for (var i = 0; i < this.context.state.data.aircraft.length; i++) {
       var ac = this.context.state.data.aircraft[i];
       //console.log("Creating feature for: " + ac.flight);
-      var item = new Feature({
-        geometry: new Point(fromLonLat([ac.lon, ac.lat])),
-        //point: new Point(fromLonLat([ac.lon, ac.lat])),
-        name: ac.flight
-      });
-      if (this.context.state.selected === ac.flight) {
-        item.setStyle(selectedStyle);
-      } else {
-        item.setStyle(style);
-      }
+      var item = this.createFeature(ac);
       items.push(item);
     }
     this.state.featuresLayer.setSource(
@@ -128,6 +126,111 @@ class OpenMap extends React.Component {
       })
     );
     
+  }
+
+  createFeature(ac) {
+    var OutlineADSBColor = '#000000';
+    var col = (this.context.state.selected === ac.flight) ? '#ff3333' : '#22dd22'; //this.getMarkerColor();
+    var opacity = 1.0; //(this.position_from_mlat ? 0.75 : 1.0);
+    var outline = OutlineADSBColor; //(this.position_from_mlat ? OutlineMlatColor : OutlineADSBColor);
+    // Determine icon and style for this feature
+    var baseMarker = getBaseMarker(ac.category,ac.model);
+    var weight = 1; //(( (this.context.state.selected === ac.flight) ? 2 : 1) / baseMarker.scale).toFixed(1);
+    var rotation = (ac.track === null ? 0 : ac.track);
+    var svgKey = col + '!' + outline + '!' + baseMarker.key + '!' + weight;
+    var styleKey = opacity + '!' + rotation;
+
+    var styleHolder = this.styleHolder[ac.flight];
+    if (null == styleHolder) {
+      styleHolder = {};
+      this.styleHolder[ac.flight] = styleHolder;
+    }
+    if (styleHolder.markerStyle === null || styleHolder.markerIcon === null || styleHolder.markerSvgKey != svgKey) {
+      // Create styles and new icon
+      var icon = new Icon({
+        anchor: baseMarker.anchor,
+        anchorXUnits: 'pixels',
+        anchorYUnits: 'pixels',
+        scale: baseMarker.scale,
+        imgSize: baseMarker.size,
+        src: svgPathToURI(baseMarker.path, baseMarker.size, outline, weight, col),
+        rotation: (baseMarker.noRotate ? 0 : rotation * Math.PI / 180.0),
+        opacity: opacity,
+        rotateWithView: (baseMarker.noRotate ? false : true)
+      });
+
+      if (baseMarker.noRotate) {
+        // the base marker won't be rotated
+        styleHolder.markerStaticIcon = icon;
+        styleHolder.markerStaticStyle = new Style({
+          image: styleHolder.markerStaticIcon
+        });
+
+        // create an arrow that we will rotate around the base marker
+        // to indicate heading
+
+        var offset = baseMarker.markerRadius * baseMarker.scale + 6;
+        var size = offset * 2;
+
+        var arrowPath = "M " + offset + ",0 m 4,4 -8,0 4,-4 z";
+        styleHolder.markerIcon = new Icon({
+          anchor: [offset, offset],
+          anchorXUnits: 'pixels',
+          anchorYUnits: 'pixels',
+          scale: 1.0,
+          imgSize: [size, size],
+          src: svgPathToURI(arrowPath, [size, size], outline, 1, outline),
+          rotation: rotation * Math.PI / 180.0,
+          opacity: opacity,
+          rotateWithView: true
+        });
+        styleHolder.markerStyle = new Style({
+          image: this.markerIcon
+        });
+      } else {
+        styleHolder.markerIcon = icon;
+        styleHolder.markerStyle = new Style({
+          image: styleHolder.markerIcon
+        });
+        styleHolder.markerStaticIcon = null;
+        styleHolder.markerStaticStyle = new Style({});
+      }
+
+      styleHolder.markerStyleKey = styleKey;
+      styleHolder.markerSvgKey = svgKey;
+
+      if (undefined !== styleHolder.marker) {
+        styleHolder.marker.setStyle(styleHolder.markerStyle);
+        styleHolder.markerStatic.setStyle(styleHolder.markerStaticStyle);
+      }
+    }
+
+    if (styleHolder.markerStyleKey != styleKey) {
+      //console.log(this.icao + " new rotation");
+      styleHolder.markerIcon.setRotation(rotation * Math.PI / 180.0);
+      styleHolder.markerIcon.setOpacity(opacity);
+      if (styleHolder.staticIcon) {
+        styleHolder.staticIcon.setOpacity(opacity);
+      }
+      styleHolder.markerStyleKey = styleKey;
+    }
+
+    // Create feature and associate style
+    // TODO alter, don't recreate
+    var item = new Feature({
+      geometry: new Point(fromLonLat([ac.lon, ac.lat])),
+      //point: new Point(fromLonLat([ac.lon, ac.lat])),
+      name: ac.flight
+    });
+    item.setStyle(styleHolder.markerStyle);
+    /*
+    if (this.context.state.selected === ac.flight) {
+      item.setStyle(selectedStyle);
+    } else {
+      item.setStyle(style);
+    }
+    */
+    return item;
   }
 /*
   handleMapClick(event) {
