@@ -19,6 +19,8 @@
     },
     "adsb_live_processor_dotnet_web": {
       "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "actuator",
       "applicationUrl": "http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
