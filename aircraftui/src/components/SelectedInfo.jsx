@@ -15,7 +15,7 @@ class SelectedInfo extends React.Component {
     if (undefined !== this.context.state.data && undefined !== this.context.state.data.aircraft) {
       for (var i = 0;i < this.context.state.data.aircraft.length;i++) {
         var ac = this.context.state.data.aircraft[i];
-        if (ac.flight == this.context.state.selected) {
+        if (ac.flight === this.context.state.selected) {
           selectedItem = ac;
         }
       }
@@ -25,7 +25,15 @@ class SelectedInfo extends React.Component {
     }
     return (
       <div className="aircraft-selected">
-        <h4>Selection details</h4>
+        <h4>Selection details<span className="extradar">&nbsp;&nbsp;
+          <a target="_fa" href={"//flightaware.com/live/modes/" + selectedItem.hex + "/redirect"}>FA</a>
+          |
+          <a target="_fr" href={"http://fr24.com/" + selectedItem.flight}>FR24</a>
+          |
+          <a target="_fs" href={"http://www.flightstats.com/go/FlightStatus/flightStatusByFlight.do?flightNumber=" + selectedItem.flight}>FS</a>
+          |
+          <a target="_pf" href={'https://planefinder.net/flight/' + selectedItem.flight}>PF</a>
+    </span></h4>
       <Table striped bordered hover size="sm">
         <thead>
           <tr>
@@ -40,9 +48,11 @@ class SelectedInfo extends React.Component {
           <tr>
             <td>{selectedItem.airline}</td>
             <td>{selectedItem.flight}</td>
-              <td><img src={"/flags-tiny/" + (undefined !== this.context.state.selectedInfo ? this.context.state.selectedInfo.icaoRange.flag_image : "blank.png")} /> {undefined !== this.context.state.selectedInfo.registration ? this.context.state.selectedInfo.registration : ""}</td>
-            <td>{selectedItem.category}</td>
-              <td>{selectedItem.type}</td>
+              <td><img 
+                alt={undefined !== this.context.state.selectedInfo ? this.context.state.selectedInfo.icaoRange.country : "Unknown country of origin"}
+                src={"/flags-tiny/" + (undefined !== this.context.state.selectedInfo ? this.context.state.selectedInfo.icaoRange.flag_image : "blank.png")} /> {"" !== this.context.state.selectedInfo.registration ? this.context.state.selectedInfo.registration : this.context.state.selectedItem.registration} {this.context.state.selectedItem&&this.context.state.selectedItem.registration ? this.context.state.selectedItem.registration : ""}</td>
+              <td>{selectedItem.categoryDesc} {selectedItem.category}</td>
+              <td>{selectedItem.model ? selectedItem.modelInfo ? selectedItem.modelInfo.name : selectedItem.model : selectedItem.type}</td>
           </tr>
         </tbody>
         <thead>

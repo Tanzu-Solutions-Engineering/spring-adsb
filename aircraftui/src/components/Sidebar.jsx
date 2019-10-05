@@ -15,6 +15,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import TracksContext from './Tracks/context';
 
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Popover from 'react-bootstrap/Popover';
+import Button from 'react-bootstrap/Button';
+
+import About from './About';
+
 const NavHeader = styled.div`
     display: ${props => (props.expanded ? 'block' : 'none')};
     white-space: nowrap;
@@ -66,17 +72,33 @@ class Sidebar extends React.Component {
   render() {
     const { expanded } = this.state;
     var that = this;
+    const popover = (
+      <Popover id="popover-basic" className='about-area'>
+        <Popover.Title as="h3">Application Details</Popover.Title>
+        <Popover.Content>
+          <About />
+        </Popover.Content>
+      </Popover>
+    );
 
     return (
       <SideNav
         expanded={expanded}
         onToggle={this.onToggle}
         onSelect={this.onSelect}
-        className={expanded? "trackernav":""}
+        className={"trackercs " + (expanded? "trackernav":"")}
       >
         <SideNav.Toggle />
         <NavHeader expanded={expanded}>
-          <NavTitle>Tracker</NavTitle>
+          <NavTitle>Tracker&nbsp;&nbsp;
+            <span>
+              <OverlayTrigger trigger="click" placement="below" overlay={popover}>
+                <Button variant="outline-light">
+                  <FontAwesomeIcon icon="info-circle" className="infolink" />
+                </Button>
+              </OverlayTrigger>
+            </span>
+          </NavTitle>
           <NavSubTitle>Detailed Information</NavSubTitle>
         </NavHeader>
 
@@ -118,6 +140,15 @@ class Sidebar extends React.Component {
             </NavIcon>
             <NavText>
               Click to {this.context.state.paused ? "unpause": "pause"}
+            </NavText>
+          </NavItem>
+
+          <NavItem active={this.context.state.showAllTracks} onClick={(evt) => { that.context.state.toggleAllTracks(); }}>
+            <NavIcon>
+              <FontAwesomeIcon icon="route" style={{ fontSize: '1.75em' }} />
+            </NavIcon>
+            <NavText>
+              Click to {this.context.state.showAllTracks ? "show selected track" : "show all tracks"}
             </NavText>
           </NavItem>
         </SideNav.Nav>

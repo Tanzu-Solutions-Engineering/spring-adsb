@@ -22,8 +22,8 @@ class AircraftTable extends Component {
       if (alow > blow) {
         return 1;
       }
-      if (alow == blow) {
-        if (a.flight > b. flight) {
+      if (alow === blow) {
+        if (a.flight > b.flight) {
           return 1;
         }
         return -1;
@@ -47,7 +47,7 @@ class AircraftTable extends Component {
       <tbody className="overflow-scroll">
           {!sortedData ? <tr><td colSpan='5'>Loading...</td></tr> :
             sortedData.map((item) => (
-            <tr key={item.flight} className={(item.flight == this.context.state.selected) ? "selected-flight" : ""}>
+            <tr key={item.flight} className={(item.flight === this.context.state.selected) ? "selected-flight" : ""}>
                 <td key={item.flight} onClick={(evt) => { that.context.state.onSelect(item.flight); }}>{item.airline} <span className="flight-code">{item.flight}</span></td>
               <td>{item.track}</td>
               <td>{item.speed}</td>

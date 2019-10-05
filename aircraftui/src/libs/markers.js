@@ -1,6 +1,3 @@
-// -*- mode: javascript; indent-tabs-mode: nil; c-basic-offset: 8 -*-
-"use strict";
-
 // From the original planeObject.js:
 var _generic_plane_svg = "M 0,0 " +
   "M 1.9565564,41.694305 C 1.7174505,40.497708 1.6419973,38.448747 " +

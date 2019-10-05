@@ -234,19 +234,20 @@ var registration_from_hexid = (function() {
       mapping.alphabet = full_alphabet;
     }
 
+    var c1, c2, c3;
     if (mapping.first) {
-      var c1 = mapping.alphabet.indexOf(mapping.first.charAt(0));
-      var c2 = mapping.alphabet.indexOf(mapping.first.charAt(1));
-      var c3 = mapping.alphabet.indexOf(mapping.first.charAt(2));
+      c1 = mapping.alphabet.indexOf(mapping.first.charAt(0));
+      c2 = mapping.alphabet.indexOf(mapping.first.charAt(1));
+      c3 = mapping.alphabet.indexOf(mapping.first.charAt(2));
       mapping.offset = c1 * mapping.s1 + c2 * mapping.s2 + c3;
     } else {
       mapping.offset = 0;
     }
 
     if (mapping.last) {
-      var c1 = mapping.alphabet.indexOf(mapping.last.charAt(0));
-      var c2 = mapping.alphabet.indexOf(mapping.last.charAt(1));
-      var c3 = mapping.alphabet.indexOf(mapping.last.charAt(2));
+      c1 = mapping.alphabet.indexOf(mapping.last.charAt(0));
+      c2 = mapping.alphabet.indexOf(mapping.last.charAt(1));
+      c3 = mapping.alphabet.indexOf(mapping.last.charAt(2));
       mapping.end = mapping.start - mapping.offset +
         c1 * mapping.s1 +
         c2 * mapping.s2 +
@@ -259,30 +260,30 @@ var registration_from_hexid = (function() {
     }
   }
 
-  for (var i = 0; i < numeric_mappings.length; ++i) {
+  for (i = 0; i < numeric_mappings.length; ++i) {
     numeric_mappings[i].end = numeric_mappings[i].start + numeric_mappings[i].count - 1;
   }
 
-  function lookup(hexid) {
-    var hexid = +("0x" + hexid);
+  function lookup(thexid) {
+    var phexid = +("0x" + thexid);
 
-    var reg = n_reg(hexid);
+    var reg = n_reg(phexid);
     if (reg)
       return reg;
 
-    reg = ja_reg(hexid);
+    reg = ja_reg(phexid);
     if (reg)
       return reg;
 
-    reg = hl_reg(hexid);
+    reg = hl_reg(phexid);
     if (reg)
       return reg;
 
-    reg = numeric_reg(hexid);
+    reg = numeric_reg(phexid);
     if (reg)
       return reg;
 
-    reg = stride_reg(hexid);
+    reg = stride_reg(phexid);
     if (reg)
       return reg;
 
@@ -335,7 +336,7 @@ var registration_from_hexid = (function() {
   //
 
   function n_letters(rem) {
-    if (rem == 0)
+    if (rem === 0)
       return "";
 
     --rem;
@@ -343,7 +344,7 @@ var registration_from_hexid = (function() {
   }
 
   function n_letter(rem) {
-    if (rem == 0)
+    if (rem === 0)
       return "";
 
     --rem;

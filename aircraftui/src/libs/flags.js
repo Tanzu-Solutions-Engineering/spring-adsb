@@ -1,4 +1,3 @@
-"use strict";
 
 // Declare ICAO registration address ranges and country
 // install the flag images in flags-tiny subdirectory. 

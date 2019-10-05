@@ -77,7 +77,7 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
  - DONE Show aircraft positions from JSON URL
  - DONE Have an aircraft info section on the right showing the same data as a table
  - DONE Refresh JSON map every second
-- WIP More Aircraft Info
+- DONE More Aircraft Info
  - DONE Abstract out aircraft rest call to another component, and use withAircraftInfo
  - DONE cache: reload needed on fetch - BUG figure out why context update isn't updating components
  - DONE more user friendly aircraft codes (airline not codes)
@@ -90,27 +90,32 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
  - DONE Ground station summary when side nav is closed
  - DONE Ground station details table
  - DONE Proper aircraft map icons
- - WIP Ascent / Descent and altitude indications and colours
+ - DONE Ascent / Descent and altitude indications and colours
   - DONE Table
-  - WIP Map
- - Aircraft category decoded
- - Provide links to other info providers
- - Make table scrollable
+  - SKIP Map
+ - DONE Aircraft model decoded
+ - DONE Aircraft category decoded
+ - DONE Provide links to other info providers
+ - DONE Make table scrollable
+ - DONE Tracks
 - DONE Testing
  - DONE Pause button for rest requests for testing?
  - DONE Don't fire off another rest request unless previous has completed
- - Check for altitude of 'ground'
- - Change favicon and react app title
-- Demo prep
- - Demo info popup - Include popup architecture png image, with steps noted, and tech icons used (redis, rabbit, etc.)
- - Pivotal info popup - Nav link in large / minimised views
- - Include link to rest api endpoint
- - Include own link to PWS info page
- - Pivotal corporate colour scheme
- - Show more map controls (layers, track toggle, zoom buttons etc.)
+ - SKIP (done by processor) Check for altitude of 'ground'
+ - DONE Change favicon
+ - DONE Change react app title
+- DONE Demo prep
+ - DONE Demo info popup - Include popup architecture png image, with steps noted, and tech icons used (redis, rabbit, etc.)
+ - DONE Pivotal info popup - Nav link in large / minimised views
+ - DONE Include link to rest api endpoint
+ - DONE Include own link to PWS info page
+ - SKIP (doesn't look great) Pivotal corporate colour scheme
 - Stretch
-  - Sea - https://github.com/dgiardini/rtl-ais
-  - Satellites - https://www.raspberrypi.org/blog/build-a-satnogs-ground-station-raspberry-pi-3b-hackspace-magazine-18/
+ - Memory management on tracks / old aircraft features (memory leak?)
+ - Highlighted track in different colour
+ - Sea - https://github.com/dgiardini/rtl-ais
+ - Satellites - https://www.raspberrypi.org/blog/build-a-satnogs-ground-station-raspberry-pi-3b-hackspace-magazine-18/
+ - Download React Native app to a phone
 
 ### For post S1P
 
@@ -122,15 +127,17 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
   - Land
   - Satellites
   - Overlays (if any)
-- Niceties
+- WIP Niceties
+ - Show more map controls (layers, track toggle, zoom buttons etc.)
  - Position estimate until re-appears in signal
- - Ground station names and locations
- - Aircraft tracks
+ - WIP Ground station names and locations
+ - Aircraft table sortable by column
  - Minimised side bar to show aircraft numbers, ground stations numbers, other links
  - Ground station list
  - Hover over groundstation highlights all aircraft from that station
   - Requires selectedFlight and selectedGS methods in provider to share context
  - Special squawk code highlighting
+ - Double click in table to zoom map to aircraft
 - Alternative UI
  - RADAR screen dark mode
  - Aircraft speed trails

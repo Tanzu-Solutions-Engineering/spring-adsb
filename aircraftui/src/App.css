@@ -27,6 +27,12 @@
   margin-right: -10px;*/
 }
 
+.trackercs {
+  /*
+  color: #09d3ac !important;
+  background: #ffffff !important;
+  */
+}
 .trackernav {
   min-width: 500px !important;
 }
@@ -48,7 +54,7 @@ html {
   overflow-y: scroll;
 }
 .nav-info-max {
-  height: calc(100vh - 120px);
+  height: calc(100vh - 165px);
   overflow-y: scroll;
 }
 .icon-overlay {
@@ -62,4 +68,17 @@ html {
 }
 .mapContainer {
   height: calc(100vh - 15px);
+}
+
+.extradar {
+  font-size: 0.7em !important;
+}
+
+.infolink {
+  font-size: 1.4em !important;
+}
+
+.about-area {
+  font-size: 1.4em;
+  min-width: 850px;
 }

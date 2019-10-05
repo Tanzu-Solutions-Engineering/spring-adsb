@@ -3,7 +3,7 @@ import React from 'react';
 import TracksContext from './Tracks/context';
 
 import Table from 'react-bootstrap/Table';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class GroundStationTable extends React.Component {
   render() {

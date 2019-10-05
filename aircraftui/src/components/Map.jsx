@@ -9,6 +9,7 @@ import Tile from 'ol/layer/Tile';
 import Feature from 'ol/Feature';
 import View from 'ol/View';
 import Point from 'ol/geom/Point';
+import LineString from 'ol/geom/LineString';
 //import Circle from 'ol/geom/Circle';
 import VectorLayer from 'ol/layer/Vector';
 import { Vector, OSM } from 'ol/source';
@@ -18,14 +19,22 @@ import Select from 'ol/interaction/Select.js';
 //import withTracksContext from './Tracks/withTracksContext';
 
 import TracksContext from './Tracks/context';
-import { getBaseMarker, svgPathToSvg, svgPathToURI } from './markers';
+import { getBaseMarker, /*svgPathToSvg,*/ svgPathToURI } from '../libs/markers';
 
 require('ol/ol.css');
 
 //var ol = require('ol');
 var stroke = new Stroke({ color: 'black', width: 2 });
 var fill = new Fill({ color: 'blue' });
-var selectedFill = new Fill({ color: 'red' });
+
+var trackStyle = new Style({
+  stroke: new Stroke({
+    color: '#000000',
+    width: 2
+  })
+});
+
+//var selectedFill = new Fill({ color: 'red' });
 var style = new Style({
   image: new RegularShape({
     fill: fill,
@@ -36,6 +45,7 @@ var style = new Style({
     angle: 0
   })
 });
+/*
 var selectedStyle = new Style({
   image: new RegularShape({
     fill: selectedFill,
@@ -46,10 +56,12 @@ var selectedStyle = new Style({
     angle: 0
   })
 });
+*/
 class OpenMap extends React.Component {
   constructor(props) {
     super(props);
     this.styleHolder = {}; // temp, always safe to recreate, no need for setState
+    this.tracks = {}; // indexed by flight id
   }
 
   async componentDidMount() {
@@ -61,6 +73,11 @@ class OpenMap extends React.Component {
     defaultFeature.setStyle(style);
 
     // create feature layer and vector source
+    var tracksLayer = new VectorLayer({
+      source: new Vector({
+        features: []
+      })
+    });
     
     var featuresLayer = new VectorLayer({
       source: new Vector({
@@ -76,6 +93,7 @@ class OpenMap extends React.Component {
         new Tile({
           source: new OSM()
         }),
+        tracksLayer,
         featuresLayer
       ],
       view: new View({
@@ -103,7 +121,8 @@ class OpenMap extends React.Component {
       map: map,
       featuresLayer: featuresLayer,
       defaultFeature: defaultFeature,
-      select: select
+      select: select,
+      tracksLayer: tracksLayer
     });
   }
 
@@ -114,17 +133,64 @@ class OpenMap extends React.Component {
     
     //console.log("Map componentDidUpdate. Items: " + this.context.state.data.aircraft.length + ". Now: " + this.context.state.data.now);
     var items = [];
+    var tracks = [];
+    var flightsCovered = [];
     for (var i = 0; i < this.context.state.data.aircraft.length; i++) {
       var ac = this.context.state.data.aircraft[i];
+      flightsCovered.push(ac.flight);
       //console.log("Creating feature for: " + ac.flight);
       var item = this.createFeature(ac);
       items.push(item);
+      // add to tracks
+      var actracks = this.tracks[ac.flight];
+      if (undefined === actracks) {
+        actracks = {segments:[],features:[]};
+        this.tracks[ac.flight] = actracks;
+      }
+      var lastSegment = (actracks.segments.length === 0) ? null : actracks.segments[actracks.segments.length - 1];
+
+      var lastpos;
+      var thispos = fromLonLat([ac.lon, ac.lat]);
+      actracks.segments.push(thispos);
+      if (null == lastSegment) {
+        lastpos = thispos; // use current pos
+      } else {
+        lastpos = lastSegment;
+      }
+
+      var geom = new LineString([lastpos, fromLonLat([ac.lon, ac.lat])]);
+      var feature = new Feature(geom);
+      feature.setStyle(trackStyle);
+      actracks.features.push(feature);
+      if (undefined !== this.context.state.selected) {
+        //console.log("Something selected: " + this.context.state.selected)
+        if (this.context.state.selected === ac.flight) {
+          //console.log("Setting selected tracks layer");
+          if (!this.context.state.showAllTracks) {
+            tracks = tracks.concat(actracks.features);
+          }
+        }
+      }
+      if (this.context.state.showAllTracks) {
+        tracks = tracks.concat(actracks.features);
+      }
     }
+    this.state.tracksLayer.setSource(
+      new Vector({
+        features: tracks
+      })
+    );
     this.state.featuresLayer.setSource(
       new Vector({
         features: items
       })
     );
+    // Cleanup of flights we can no longer see
+    for (var key in Object.keys(this.tracks)) {
+      if (!flightsCovered.includes(key)) {
+        delete this.tracks[key];
+      }
+    }
     
   }
 
@@ -145,7 +211,7 @@ class OpenMap extends React.Component {
       styleHolder = {};
       this.styleHolder[ac.flight] = styleHolder;
     }
-    if (styleHolder.markerStyle === null || styleHolder.markerIcon === null || styleHolder.markerSvgKey != svgKey) {
+    if (styleHolder.markerStyle === null || styleHolder.markerIcon === null || styleHolder.markerSvgKey !== svgKey) {
       // Create styles and new icon
       var icon = new Icon({
         anchor: baseMarker.anchor,
@@ -205,7 +271,7 @@ class OpenMap extends React.Component {
       }
     }
 
-    if (styleHolder.markerStyleKey != styleKey) {
+    if (styleHolder.markerStyleKey !== styleKey) {
       //console.log(this.icao + " new rotation");
       styleHolder.markerIcon.setRotation(rotation * Math.PI / 180.0);
       styleHolder.markerIcon.setOpacity(opacity);
