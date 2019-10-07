@@ -1,0 +1,84 @@
+.App {
+  text-align: center;
+  width: 100%;
+}
+
+.App-logo {
+  height: 40vmin;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #09d3ac;
+}
+
+.openlayers-map {
+  /*height: 100vh !important;
+  margin-right: -10px;*/
+}
+
+.trackercs {
+  /*
+  color: #09d3ac !important;
+  background: #ffffff !important;
+  */
+}
+.trackernav {
+  min-width: 500px !important;
+}
+
+html {
+  font-size: 10px;
+}
+
+.fullwidth {
+  width: calc(100vw - 16px) !important;
+  height: calc(100vh - 16px) !important;
+}
+
+.selected-flight {
+  background-color: red !important;
+}
+
+.overflow-scroll {
+  overflow-y: scroll;
+}
+.nav-info-max {
+  height: calc(100vh - 165px);
+  overflow-y: scroll;
+}
+.icon-overlay {
+  position: relative;
+  top: -40px;
+  left: 10px;
+  color: rgb(51, 47, 47);
+}
+.invisible {
+  display: none;
+}
+.mapContainer {
+  height: calc(100vh - 15px);
+}
+
+.extradar {
+  font-size: 0.7em !important;
+}
+
+.infolink {
+  font-size: 1.4em !important;
+}
+
+.about-area {
+  font-size: 1.4em;
+  min-width: 850px;
+}

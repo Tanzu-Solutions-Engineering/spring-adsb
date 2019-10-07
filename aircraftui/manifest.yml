@@ -1,0 +1,8 @@
+---
+applications:
+- name: adsb
+  buildpacks: 
+  - staticfile_buildpack
+  memory: 16M
+  disk_quota: 20M
+  path: ./build
