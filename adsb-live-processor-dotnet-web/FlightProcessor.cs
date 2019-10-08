@@ -38,7 +38,7 @@ namespace adsb_live_processor_dotnet_web
                 exclusive: false,
                 autoDelete: false,
                 arguments: null);
-            _channel.ExchangeDeclare(exchange: "adsb-fan-exchange", type: "topic", durable: true, autoDelete: false);
+            _channel.ExchangeDeclare(exchange: "adsb-fan-exchange", type: "fanout", durable: false, autoDelete: false);
             _channel.QueueBind(queue: "adsbposition.live", exchange: "adsb-fan-exchange",routingKey: "");
 
             _channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
