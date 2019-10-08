@@ -129,7 +129,7 @@ class TracksProvider extends Component {
   async airframeLookup(ac) {
     return this.fetchAirframeDetails(ac.hex).then((airframeInfo) => {
       if (null != airframeInfo) {
-        console.log("Got flight info for: " + ac.flight + " : " + JSON.stringify(airframeInfo));
+        //console.log("Got flight info for: " + ac.flight + " : " + JSON.stringify(airframeInfo));
         if (undefined !== airframeInfo.t) {
           ac.model = airframeInfo.t;
           ac.modelInfo = lookupModel(ac.model);

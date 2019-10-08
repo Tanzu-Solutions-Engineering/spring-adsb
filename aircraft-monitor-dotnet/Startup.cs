@@ -11,7 +11,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Steeltoe.CloudFoundry.Connector.Redis;
 using Steeltoe.Management.CloudFoundry;
-using Redis.Models;
 
 namespace aircraft_monitor_dotnet
 {
@@ -35,10 +34,10 @@ namespace aircraft_monitor_dotnet
             });
             services.AddDistributedRedisCache(Configuration);
 
-      // This works like the above, but adds a IConnectionMultiplexer to the container
-      services.AddRedisConnectionMultiplexer(Configuration);
+            // This works like the above, but adds a IConnectionMultiplexer to the container
+            services.AddRedisConnectionMultiplexer(Configuration);
 
-      services.AddCloudFoundryActuators(Configuration);
+            services.AddCloudFoundryActuators(Configuration);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -57,7 +56,7 @@ namespace aircraft_monitor_dotnet
                 app.UseHsts();
             }
 
-      app.UseCloudFoundryActuators();
+            app.UseCloudFoundryActuators();
 
             app.UseHttpsRedirection();
             app.UseDefaultFiles();
@@ -66,7 +65,7 @@ namespace aircraft_monitor_dotnet
 
             app.UseMvc();
             
-            AircraftData.InitializeCache(app.ApplicationServices).Wait();
+            //AircraftData.InitializeCache(app.ApplicationServices).Wait();
 
         }
     }
