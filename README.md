@@ -138,9 +138,10 @@ The basic outline is:-
 
 |Processor|Java status|C# status|Notes|
 |----|----|----|----|
-adsb-console|Working, instance per base station (local)|Needs REST retrieval code and testing|Reads ADSB JSON and sends to RabbitMQ
-adsb-live-processor|Working, multi instance|Updated, needs testing|Takes live feed and sends to Redis
-aircraft-monitor|Working|Not started|Aircraft REST endpoint and map display web app
+adsb-console-java|Working, instance per base station (local)|N/A|Reads ADSB JSON and sends to RabbitMQ
+adsb-live-processor|Working, multi instance|Working, multi instance|Takes live feed and sends to Redis
+aircraft-monitor|Working|Working|Aircraft REST endpoint (and older map display web app)
+aircraftui|N/A|N/A|ReactJS (staticfile buildpack) new demo web UI
 
 ## License and Copyright
 
