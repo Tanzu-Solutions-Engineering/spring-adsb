@@ -1,10 +1,10 @@
 ---
 applications:
-- name: adsb-live-processor-dotnet
-  memory: 64M
+- name: adsb-live-processor
+  memory: 384M
   disk_quota: 256M
   instances: 3 
-  random-route: true
+  random-route: false
   health-check-type: process
   services:
   - surveil-amqp

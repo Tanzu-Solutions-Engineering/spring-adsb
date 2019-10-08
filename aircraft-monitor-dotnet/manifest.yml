@@ -3,7 +3,7 @@ applications:
 - name: aircraft-monitor-central
   buildpacks:
    - dotnet_core_buildpack
-  memory: 256M
+  memory: 384M
   disk_quota: 200M
   instances: 3 
   random-route: false 

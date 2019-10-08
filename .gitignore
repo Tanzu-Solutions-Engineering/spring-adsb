@@ -266,3 +266,5 @@ paket-files/
 __pycache__/
 *.pyc
 
+
+adsb-console-java/target
