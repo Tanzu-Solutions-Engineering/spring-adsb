@@ -158,10 +158,19 @@ class OpenMap extends React.Component {
         lastpos = lastSegment;
       }
 
-      var geom = new LineString([lastpos, fromLonLat([ac.lon, ac.lat])]);
-      var feature = new Feature(geom);
-      feature.setStyle(trackStyle);
-      actracks.features.push(feature);
+      // see if there is already a feature
+      // get that feature's geometry (LineString)
+      // Replace with a new geometry using the same coordinates, plus the new one
+      //console.log("Flight " + ac.flight + " has " + actracks.features.length + " features");
+      if (actracks.features.length > 0) {
+        var feature = actracks.features[0];
+        feature.setGeometry(new LineString([...feature.getGeometry().getCoordinates(),thispos]));
+      } else {
+        var geom = new LineString([lastpos, fromLonLat([ac.lon, ac.lat])]);
+        var feature = new Feature(geom);
+        feature.setStyle(trackStyle);
+        actracks.features.push(feature);
+      }
       if (undefined !== this.context.state.selected) {
         //console.log("Something selected: " + this.context.state.selected)
         if (this.context.state.selected === ac.flight) {
@@ -175,11 +184,15 @@ class OpenMap extends React.Component {
         tracks = tracks.concat(actracks.features);
       }
     }
+    this.state.tracksLayer.getSource().clear();
+    this.state.tracksLayer.setSource(null);
     this.state.tracksLayer.setSource(
       new Vector({
         features: tracks
       })
     );
+    this.state.featuresLayer.getSource().clear();
+    this.state.featuresLayer.setSource(null);
     this.state.featuresLayer.setSource(
       new Vector({
         features: items
