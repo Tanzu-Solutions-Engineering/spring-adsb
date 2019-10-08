@@ -32,7 +32,7 @@ namespace aircraft_monitor_dotnet
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-            services.AddDistributedRedisCache(Configuration);
+            //services.AddDistributedRedisCache(Configuration);
 
             // This works like the above, but adds a IConnectionMultiplexer to the container
             services.AddRedisConnectionMultiplexer(Configuration);
