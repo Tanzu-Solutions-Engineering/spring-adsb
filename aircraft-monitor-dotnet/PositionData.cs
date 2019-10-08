@@ -1,6 +1,6 @@
 using System;
 
-namespace SurveillanceProcessor
+namespace aircraft_monitor_dotnet
 {
   class PositionData
   {

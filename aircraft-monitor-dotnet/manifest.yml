@@ -1,12 +1,12 @@
 ---
 applications:
-- name: aircraft-monitor
+- name: aircraft-monitor-central
   buildpacks:
    - dotnet_core_buildpack
   memory: 256M
   disk_quota: 200M
   instances: 3 
-  random-route: true 
+  random-route: false 
   env:
     ASPNETCORE_ENVIRONMENT: Development
   services:

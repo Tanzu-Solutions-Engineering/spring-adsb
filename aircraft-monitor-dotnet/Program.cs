@@ -21,6 +21,12 @@ namespace aircraft_monitor_dotnet
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .AddCloudFoundry()
+                .ConfigureLogging(cfg =>
+                {
+                  cfg.ClearProviders();
+                  cfg.AddDynamicConsole();
+                })
                 .UseStartup<Startup>()
                 .ConfigureAppConfiguration((builderContext, configBuilder) => 
                 {

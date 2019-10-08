@@ -62,6 +62,7 @@ class OpenMap extends React.Component {
     super(props);
     this.styleHolder = {}; // temp, always safe to recreate, no need for setState
     this.tracks = {}; // indexed by flight id
+    this.icons = {}; // aircraft SVG images by flight id
   }
 
   async componentDidMount() {
@@ -139,7 +140,11 @@ class OpenMap extends React.Component {
       var ac = this.context.state.data.aircraft[i];
       flightsCovered.push(ac.flight);
       //console.log("Creating feature for: " + ac.flight);
-      var item = this.createFeature(ac);
+      var item = this.icons[ac.flight];
+      //if (undefined === item) {
+        item = this.createFeature(ac);
+        this.icons[ac.flight] = item;
+      //}
       items.push(item);
       // add to tracks
       var actracks = this.tracks[ac.flight];
@@ -158,10 +163,20 @@ class OpenMap extends React.Component {
         lastpos = lastSegment;
       }
 
-      var geom = new LineString([lastpos, fromLonLat([ac.lon, ac.lat])]);
-      var feature = new Feature(geom);
-      feature.setStyle(trackStyle);
-      actracks.features.push(feature);
+      // see if there is already a feature
+      // get that feature's geometry (LineString)
+      // Replace with a new geometry using the same coordinates, plus the new one
+      //console.log("Flight " + ac.flight + " has " + actracks.features.length + " features");
+      var feature;
+      if (actracks.features.length > 0) {
+        feature = actracks.features[0];
+        feature.setGeometry(new LineString([...feature.getGeometry().getCoordinates(),thispos]));
+      } else {
+        var geom = new LineString([lastpos, fromLonLat([ac.lon, ac.lat])]);
+        feature = new Feature(geom);
+        feature.setStyle(trackStyle);
+        actracks.features.push(feature);
+      }
       if (undefined !== this.context.state.selected) {
         //console.log("Something selected: " + this.context.state.selected)
         if (this.context.state.selected === ac.flight) {
@@ -175,11 +190,15 @@ class OpenMap extends React.Component {
         tracks = tracks.concat(actracks.features);
       }
     }
+    this.state.tracksLayer.getSource().clear();
+    this.state.tracksLayer.setSource(null);
     this.state.tracksLayer.setSource(
       new Vector({
         features: tracks
       })
     );
+    this.state.featuresLayer.getSource().clear();
+    this.state.featuresLayer.setSource(null);
     this.state.featuresLayer.setSource(
       new Vector({
         features: items
@@ -189,6 +208,8 @@ class OpenMap extends React.Component {
     for (var key in Object.keys(this.tracks)) {
       if (!flightsCovered.includes(key)) {
         delete this.tracks[key];
+        delete this.icons[key];
+        delete this.styleHolder[key];
       }
     }
     
