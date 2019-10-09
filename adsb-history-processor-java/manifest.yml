@@ -1,0 +1,14 @@
+---
+applications:
+- name: adsb-history-processor
+  memory: 512M
+  disk_quota: 256M
+  env:
+    JAVA_OPTS: "-Xss256k -XX:ReservedCodeCacheSize=20M"
+  instances: 3
+  random-route: true
+  path: target/adsb-history-processor-0.0.1-SNAPSHOT.jar
+  health-check-type: process
+  services:
+  - surveil-amqp
+  - geohistory
