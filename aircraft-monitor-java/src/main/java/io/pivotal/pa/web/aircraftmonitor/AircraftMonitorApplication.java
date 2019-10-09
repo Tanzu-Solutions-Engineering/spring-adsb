@@ -15,6 +15,11 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.jdbc.core.JdbcTemplate;
+import java.sql.Timestamp;
+import java.sql.ResultSet;
+import java.util.List;
+import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -27,8 +32,13 @@ public class AircraftMonitorApplication {
 
 	private static Logger LOG = Logger.getLogger(AircraftMonitorApplication.class.getName());
 
+    // live data
     @Autowired
     private RedisTemplate redisTemplate = null;
+
+    // historical data
+    @Autowired
+    private JdbcTemplate jdbcTemplate = null;
     
     private long messages = 1;
 	
@@ -139,7 +149,21 @@ public class AircraftMonitorApplication {
 			redisTemplate.setValueSerializer(new StringRedisSerializer());
 			redisTemplate.setKeySerializer(new StringRedisSerializer());
 		};
-	}
+    }
+    
+    @RequestMapping("/tracks/{craftid}/latest")
+    String latestPosition(String craftid) {
+        List<PositionData> results = jdbcTemplate.query(
+            "select jsondata from geohistory.tracks where craftid=? order by gpsdatetime desc limit 1", 
+            new Object[]{craftid},
+            (rs, rowNum) -> 
+              PositionData.fromJSON(new JsonObject(rs.getObject("jsondata")))
+        );
+        if (results.size() > 0) {
+            return results.get(0).toString();
+        }
+        return "";
+    }
 
     @RequestMapping("/data/aircraft.json")
     String liveView() {
