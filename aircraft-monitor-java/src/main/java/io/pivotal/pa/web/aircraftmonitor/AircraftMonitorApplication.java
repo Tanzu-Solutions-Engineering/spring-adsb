@@ -15,13 +15,16 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.sql.Timestamp;
 import java.sql.ResultSet;
 import java.util.List;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -151,18 +154,20 @@ public class AircraftMonitorApplication {
 		};
     }
     
-    @RequestMapping("/tracks/{craftid}/latest")
-    String latestPosition(String craftid) {
-        List<PositionData> results = jdbcTemplate.query(
+    @RequestMapping(value="/tracks/{craftid}/latest", produces={"application/json"})
+    JSONObject latestPosition(@PathVariable("craftid") String craftid) {
+        LOG.log(Level.WARNING, "Called the latest tracks method for: " + craftid);
+        List<JSONObject> results = jdbcTemplate.query(
             "select jsondata from geohistory.tracks where craftid=? order by gpsdatetime desc limit 1", 
             new Object[]{craftid},
             (rs, rowNum) -> 
-              PositionData.fromJSON(new JsonObject(rs.getObject("jsondata")))
+              (JSONObject)JSONValue.parse(new StringReader(rs.getString("jsondata")))
         );
         if (results.size() > 0) {
-            return results.get(0).toString();
+            return results.get(0);
         }
-        return "";
+        LOG.log(Level.WARNING, "Returning blank JSON Object");
+        return new JSONObject();
     }
 
     @RequestMapping("/data/aircraft.json")
