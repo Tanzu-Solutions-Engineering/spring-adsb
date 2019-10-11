@@ -1,4 +1,4 @@
-package io.pivotal.pa.rabbitmq.adsbliveprocessor;
+package io.pivotal.pa.rabbitmq.adsbcapture;
 
 import java.util.HashMap;
 import java.util.Map;

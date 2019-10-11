@@ -21,6 +21,7 @@ import java.sql.Timestamp;
 import java.sql.ResultSet;
 import java.util.List;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONValue;
 
 import java.io.IOException;
@@ -156,7 +157,7 @@ public class AircraftMonitorApplication {
     
     @RequestMapping(value="/tracks/{craftid}/latest", produces={"application/json"})
     JSONObject latestPosition(@PathVariable("craftid") String craftid) {
-        LOG.log(Level.WARNING, "Called the latest tracks method for: " + craftid);
+        LOG.log(Level.WARNING, "Called the latest position method for: " + craftid);
         List<JSONObject> results = jdbcTemplate.query(
             "select jsondata from geohistory.tracks where craftid=? order by gpsdatetime desc limit 1", 
             new Object[]{craftid},
@@ -168,6 +169,34 @@ public class AircraftMonitorApplication {
         }
         LOG.log(Level.WARNING, "Returning blank JSON Object");
         return new JSONObject();
+    }
+    
+    @RequestMapping(value = "/tracks/{craftid}/today", produces = { "application/json" })
+    JSONArray latestTrack(@PathVariable("craftid") String craftid) {
+        LOG.log(Level.WARNING, "Called the latest tracks method for: " + craftid);
+        /*
+        List<JSONObject> results = jdbcTemplate.query(
+                "select jsondata from geohistory.tracks where craftid=? and gpsdate in (select gpsdate from geohistory.tracks where craftid=? order by gpsdate desc limit 1) order by gpsdatetime desc",
+                new Object[] { craftid , craftid },
+                (rs, rowNum) -> (JSONObject) JSONValue.parse(new StringReader(rs.getString("jsondata"))));
+                */
+        List<JSONObject> results = jdbcTemplate.query(
+                "select gpsdatetime,lon,lat from geohistory.tracks where craftid=? and gpsdate in (select gpsdate from geohistory.tracks where craftid=? order by gpsdate desc limit 1) order by gpsdatetime desc",
+                new Object[] { craftid, craftid },
+                (rs, rowNum) -> {
+                    JSONObject jobj = new JSONObject();
+                    jobj.put("gpsdatetime",Long.toString(rs.getTimestamp("gpsdatetime").getTime())); // JSON sucks at large longs
+                    jobj.put("lon",rs.getDouble("lon"));
+                    jobj.put("lat",rs.getDouble("lat"));
+                    return jobj;
+                }
+        );
+        JSONArray jarr = new JSONArray();
+        for (JSONObject jobj : results) {
+            jarr.add(jobj);
+        }
+        LOG.log(Level.WARNING, "Returning JSON Array");
+        return jarr;
     }
 
     @RequestMapping("/data/aircraft.json")
