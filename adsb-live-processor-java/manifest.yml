@@ -8,7 +8,7 @@ applications:
   instances: 3 
   random-route: true
   path: target/adsb-live-processor-0.0.1-SNAPSHOT.jar
-  health-check-type: process
+  #health-check-type: process
   services:
   - surveil-amqp
   - smallredis
