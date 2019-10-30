@@ -15,8 +15,17 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.jdbc.core.JdbcTemplate;
+import java.sql.Timestamp;
+import java.sql.ResultSet;
+import java.util.List;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONValue;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,8 +36,13 @@ public class AircraftMonitorApplication {
 
 	private static Logger LOG = Logger.getLogger(AircraftMonitorApplication.class.getName());
 
+    // live data
     @Autowired
     private RedisTemplate redisTemplate = null;
+
+    // historical data
+    @Autowired
+    private JdbcTemplate jdbcTemplate = null;
     
     private long messages = 1;
 	
@@ -139,7 +153,51 @@ public class AircraftMonitorApplication {
 			redisTemplate.setValueSerializer(new StringRedisSerializer());
 			redisTemplate.setKeySerializer(new StringRedisSerializer());
 		};
-	}
+    }
+    
+    @RequestMapping(value="/tracks/{craftid}/latest", produces={"application/json"})
+    JSONObject latestPosition(@PathVariable("craftid") String craftid) {
+        LOG.log(Level.WARNING, "Called the latest position method for: " + craftid);
+        List<JSONObject> results = jdbcTemplate.query(
+            "select jsondata from geohistory.tracks where craftid=? order by gpsdatetime desc limit 1", 
+            new Object[]{craftid},
+            (rs, rowNum) -> 
+              (JSONObject)JSONValue.parse(new StringReader(rs.getString("jsondata")))
+        );
+        if (results.size() > 0) {
+            return results.get(0);
+        }
+        LOG.log(Level.WARNING, "Returning blank JSON Object");
+        return new JSONObject();
+    }
+    
+    @RequestMapping(value = "/tracks/{craftid}/today", produces = { "application/json" })
+    JSONArray latestTrack(@PathVariable("craftid") String craftid) {
+        LOG.log(Level.WARNING, "Called the latest tracks method for: " + craftid);
+        /*
+        List<JSONObject> results = jdbcTemplate.query(
+                "select jsondata from geohistory.tracks where craftid=? and gpsdate in (select gpsdate from geohistory.tracks where craftid=? order by gpsdate desc limit 1) order by gpsdatetime desc",
+                new Object[] { craftid , craftid },
+                (rs, rowNum) -> (JSONObject) JSONValue.parse(new StringReader(rs.getString("jsondata"))));
+                */
+        List<JSONObject> results = jdbcTemplate.query(
+                "select gpsdatetime,lon,lat from geohistory.tracks where craftid=? and gpsdate in (select gpsdate from geohistory.tracks where craftid=? order by gpsdate desc limit 1) order by gpsdatetime desc",
+                new Object[] { craftid, craftid },
+                (rs, rowNum) -> {
+                    JSONObject jobj = new JSONObject();
+                    jobj.put("gpsdatetime",Long.toString(rs.getTimestamp("gpsdatetime").getTime())); // JSON sucks at large longs
+                    jobj.put("lon",rs.getDouble("lon"));
+                    jobj.put("lat",rs.getDouble("lat"));
+                    return jobj;
+                }
+        );
+        JSONArray jarr = new JSONArray();
+        for (JSONObject jobj : results) {
+            jarr.add(jobj);
+        }
+        LOG.log(Level.WARNING, "Returning JSON Array");
+        return jarr;
+    }
 
     @RequestMapping("/data/aircraft.json")
     String liveView() {

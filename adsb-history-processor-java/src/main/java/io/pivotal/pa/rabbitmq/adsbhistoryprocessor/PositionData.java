@@ -1,4 +1,4 @@
-package io.pivotal.pa.rabbitmq.adsbcapture;
+package io.pivotal.pa.rabbitmq.adsbhistoryprocessor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -88,6 +88,27 @@ public class PositionData {
         result.put("hex", hex);
         result.put("speed", speed);
         return result;
+    }
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append("{")
+                .append("\"flight\":\"").append(flight).append("\",")
+                .append("\"altitude\":").append(altitude).append(",")
+                .append("\"hex\":\"").append(hex).append("\",")
+                .append("\"lon\":").append(lon).append(",")
+                .append("\"track\":").append(track).append(",")
+                .append("\"lat\":").append(lat).append(",")
+                .append("\"speed\":").append(speed).append(",")
+                .append("\"timestamp\":").append(timestamp).append(",")
+                .append("\"category\":\"").append(category).append("\",")
+                .append("\"squawk\":\"").append(squawk).append("\",")
+                .append("\"rssi\":").append(rssi).append(",")
+                .append("\"messages\":").append(messages).append(",")
+                .append("\"seen\":").append(seen).append(",")
+                .append("\"seen_pos\":").append(seen_pos).append(",")
+                .append("\"vert_rate\":").append(vert_rate)
+                .append("}");
+        return result.toString();
     }
 
     /**

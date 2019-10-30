@@ -1,9 +1,10 @@
 ---
 applications:
-- name: aircraft-monitor
+- name: aircraft-monitor-gp
   memory: 650M
-  instances: 3 
+  instances: 1
   random-route: true 
   path: target/aircraft-monitor-0.0.1-SNAPSHOT.jar
   services:
   - smallredis
+  - geohistory

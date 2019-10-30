@@ -1,5 +1,7 @@
 package io.pivotal.pa.web.aircraftmonitor;
 
+import org.json.simple.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +26,138 @@ public class PositionData {
     private double rssi;
     private ObjectType type;
     private String groundStationName;
+
+    public static final String BLANK = "";
+
+    public static PositionData fromJSON(JSONObject json) {
+        PositionData data = new PositionData();
+
+        // Data without flightId is unusable.
+        Object flightId = json.get("flight");
+        if (flightId == null || BLANK.equals(flightId.toString().trim())) {
+            return data;
+        }
+
+        data.flight = flightId.toString().trim();
+        data.hex = (String) json.get("hex");
+        data.squawk = (String) json.get("squawk");
+        data.category = (String) json.get("category");
+        Object obj = json.get("lon");
+        if (null == obj) {
+            data.lon = 0.0d;
+        } else {
+            try {
+                data.lon = (double) obj;
+            } catch (Exception e) {
+                data.lon = -1;
+            }
+        }
+        obj = json.get("altitude");
+        if (null == obj) {
+            data.altitude = 0;
+        } else {
+            if (obj.toString().equals("grnd")) {
+                data.altitude = -1;
+            } else {
+                try {
+                    data.altitude = (long) obj;
+                } catch (Exception e) {
+                    data.altitude = -1;
+                }
+            }
+        }
+        obj = json.get("track");
+        if (null == obj) {
+            data.track = 0;
+        } else {
+            try {
+                data.track = (long) obj;
+            } catch (Exception e) {
+                data.altitude = -1;
+            }
+        }
+        obj = json.get("messages");
+        if (null == obj) {
+            data.messages = 1;
+        } else {
+            try {
+                data.messages = (long) obj;
+            } catch (Exception e) {
+                data.messages = -1;
+            }
+        }
+        obj = json.get("lat");
+        if (null == obj) {
+            data.lat = 0.0d;
+        } else {
+            try {
+                data.lat = (double) obj;
+            } catch (Exception e) {
+                data.lat = -1;
+            }
+        }
+        obj = json.get("speed");
+        if (null == obj) {
+            data.speed = 0;
+        } else {
+            try {
+                data.speed = (long) obj;
+            } catch (Exception e) {
+                data.speed = -1;
+            }
+        }
+        obj = json.get("vert_rate");
+        if (null == obj) {
+            data.vert_rate = 0;
+        } else {
+            try {
+                data.vert_rate = (long) obj;
+            } catch (Exception e) {
+                data.vert_rate = -1;
+            }
+        }
+        obj = json.get("timestamp");
+        if (null == obj) {
+            data.timestamp = 0;
+        } else {
+            try {
+                data.timestamp = (long) obj;
+            } catch (Exception e) {
+                data.timestamp = -1;
+            }
+        }
+        obj = json.get("seen");
+        if (null == obj) {
+            data.seen = 0;
+        } else {
+            try {
+                data.seen = (double) obj;
+            } catch (Exception e) {
+                data.seen = -1;
+            }
+        }
+        obj = json.get("seen_pos");
+        if (null == obj) {
+            data.seen_pos = 0;
+        } else {
+            try {
+                data.seen_pos = (double) obj;
+            } catch (Exception e) {
+                data.seen_pos = -1;
+            }
+        }
+        obj = json.get("rssi");
+        if (null == obj) {
+            data.rssi = 0;
+        } else {
+            try {
+                data.rssi = (double) obj;
+            } catch (Exception e) {
+                data.rssi = -1;
+            }
+        }
+        return data;
+    }
 
     /**
      * @param groundStationName the groundStationName to set
