@@ -39,7 +39,7 @@
     "@fortawesome/fontawesome-free": "5.11.1",
     "@trendmicro/react-sidenav": "0.4.5",
     "bootstrap": "4.3.1",
-    "jquery": "3.4.1",
+    "jquery": "3.5.0",
     "ol": "5.3.3",
     "styled-components": "4.3.2"
   }
